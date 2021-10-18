@@ -1,3 +1,4 @@
+import { LoginTemplateComponent } from './login-template/login-template.component';
 import { Component, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes,RouterModule } from '@angular/router';
@@ -7,14 +8,17 @@ import { SentComponent } from './main/sent/sent.component';
 import { DraftComponent } from './main/draft/draft.component';
 import { ContentComponent } from './content/content.component';
 import { ComposeComponent } from './compose/compose.component';
+import { LoginComponent } from './login/login.component';
 
 const routes:Routes=[
+
   {
-    path:'',
-    redirectTo:'main/inbox',
-    pathMatch:'full'
-    
-    // or login page
+    path:'register',
+    component:LoginComponent,
+  },
+  {
+    path:'main/inbox',
+    component:InboxComponent,
   },
   {
     path:'head',
@@ -35,6 +39,10 @@ const routes:Routes=[
   },{
     path:'main/compose',
     component:ComposeComponent
+  },{
+    path:'',
+    component: LoginTemplateComponent,
+    pathMatch:'full'
   },
 ]
 @NgModule({

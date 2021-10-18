@@ -1,40 +1,45 @@
-body{
+body {
     background-color: #404040;
 }
-.head{
-    background-color: #808080 ;
+
+.head {
+    background-color: #808080;
     border-radius: 10px;
     border-right: 3px solid skyblue;
     border-bottom: 5px solid skyblue;
     border-left: 3px solid skyblue;
-    text-align: center; 
+    text-align: center;
+}
 
-  } 
-.message-icon i{
+.message-icon i {
     padding: 0px 3px;
     cursor: pointer;
 }
-.message-input .form-control{
-    border-radius:1px;
+
+.message-input .form-control {
+    border-radius: 1px;
     box-shadow: none;
 }
 
-.message-footer{
+.message-footer {
     background-color: whitesmoke;
-    border-top:2px solid #E5E5E5;
+    border-top: 2px solid #E5E5E5;
     background-color: #f5f5f5;
     width: 100%;
 }
-.message-footer i{
-    color:#404040;
-    padding:0px 5px;
+
+.message-footer i {
+    color: #404040;
+    padding: 0px 5px;
     cursor: pointer;
 }
+
 #mail_text {
     direction: ltr;
-    overflow:auto;
+    overflow: auto;
     height: 156px;
 }
-.message-footer button{
+
+.message-footer button {
     border: none;
 }

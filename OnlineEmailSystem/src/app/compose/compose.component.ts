@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { Location } from '@angular/common';
+
 import * as $ from 'jquery';
 
 @Component({
@@ -45,7 +47,9 @@ export class ComposeComponent implements OnInit {
     const elem = document.getElementById("compose");
     if(elem)
       elem.style.display = "none";
+
       this.location.back()
+
 
   }
   maxscreen(){
@@ -79,15 +83,14 @@ export class ComposeComponent implements OnInit {
       elem3.style.height="156px"
       var text1 = document.getElementById("text1");
       if(text1)
-        text1.style.fontSize = "18px";
+
+        text1.style.fontSize = "20px";
     }
     this.tog_fname = !this.tog_fname;
   }
 
-
   ngOnInit(): void {
 
-    $(document).ready(function() {
       $('#jBold').click(function() {
         document.execCommand('bold');
       });
@@ -97,7 +100,6 @@ export class ComposeComponent implements OnInit {
       $('#junder').click(function() {
         document.execCommand('underline');
       });
-    });
-  }
-
+  };
 }
+
