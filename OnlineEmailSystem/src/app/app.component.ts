@@ -1,4 +1,4 @@
-import { AuthService } from './auth.service';
+import { AuthService } from './_Service/auth.service';
 import { Component ,OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';

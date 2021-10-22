@@ -20,7 +20,9 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getData() {
-    return this.http.get<myData>('http://localhost:8000/api/userdata')
+    let token = localStorage.getItem("token")
+    console.log(token)
+    return this.http.post<myData>('http://localhost:8000/api/userdata',{token})
   }
 
   isLoggedIn(): Observable<isLoggedIn> {

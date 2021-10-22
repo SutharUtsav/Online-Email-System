@@ -1,9 +1,9 @@
-import { SearchDataService } from '../../search-data.service';
+import { SearchDataService } from '../../_Service/search-data.service';
 import { Component, OnInit,ElementRef } from '@angular/core';
 import { data } from 'jquery';
 import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
-import { UserService } from '../../user.service'
-import { AuthService } from '../../auth.service'
+import { UserService } from '../../_Service/user.service'
+import { AuthService } from '../../_Service/auth.service'
 import { Router } from '@angular/router';
 
 @Component({

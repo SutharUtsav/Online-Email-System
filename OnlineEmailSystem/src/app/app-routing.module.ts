@@ -47,7 +47,11 @@ const routes:Routes=[
         component:ContentComponent
       },
       {
-        path:'forward/:id',
+        path :'draft/:id/:title',
+        component:ComposeComponent
+      },
+      {
+        path:'forward/:id/:title',
         component:ComposeComponent
       },
       {

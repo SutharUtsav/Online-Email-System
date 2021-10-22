@@ -7,13 +7,9 @@ const port = process.env.PORT || 8000;
 const TOKEN_SECRET = "sudh8dishksnadisdshdbasdsknosadjodkdnbdudj"
 
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(session({
-    secret: 'jndugagddubdjduhasnbushbidsbu',
-    saveUnintialized: false,
-    resave: false
-}))
+app.use(express.urlencoded({ extended: true }, { limit: '50mb' }))
+app.use(express.json({ limit: '50mb' }))
+
 var cors = require('cors');
 app.use(cors());
 
@@ -29,34 +25,172 @@ db.once('open', mongoConnected);
 
 function mongoConnected() {
     var EmailSchema = new mongoose.Schema({
-        // _id: {type: Schema.Types.ObjectId, ref: '_Id'},
         mail_id: Number,
         username: String,
         from: String,
+        to: String,
         sub: String,
         msg: String,
         time: String,
         read: Boolean,
-        type: String,
+
 
     }, { collection: 'Mails' });
+    var DraftSchema = new mongoose.Schema({
+        mail_id: Number,
+        username: String,
+        from: String,
+        to: String,
+        sub: String,
+        msg: Object,
+        time: String,
+        read: Boolean,
+
+
+    }, { collection: 'Draft' });
+    var Counter = new mongoose.Schema({
+        _id: String,
+        sequence_value: Number,
+
+    }, { collection: 'counters' });
+
+    var Draft_count = new mongoose.Schema({
+        _id: String,
+        draft_value: Number,
+
+    }, { collection: 'draft_count' });
+
 
     var Mail = mongoose.model("Email", EmailSchema);
+    var Draft = mongoose.model("Draft", DraftSchema);
+    var next = mongoose.model("Counter", Counter);
+    var next_draft = mongoose.model("next_draft", Draft_count);
 
-    // app.get("/mail", (req, res) => {
-    //     Mail.find(function(err, mails) {
-    //         if (err) return res.status(400).json({ error: 'Mail not found!' })
+    app.get("/mail", (req, res) => {
+        Mail.find(function(err, mails) {
+            if (err) return res.status(400).json({ error: 'Mail not found!' })
 
-    //         return res.status(200).json({ mails: mails });
-    //     });
-    // });
+            return res.status(200).json(mails);
+        });
+    });
+    app.get("/mail/draft", (req, res) => {
+        Draft.find(function(err, mails) {
+            if (err) return res.status(400).json({ error: 'Mail not found!' })
 
-    // app.get("/mail/:id", (req, res) => {
-    //     Mail.findById(req.params.id, function(err, mail) {
-    //         if (err) return res.status(400).json({ error: 'Mail not found!' })
-    //         return res.status(200).json(mail)
-    //     });
-    // });
+            return res.status(200).json(mails);
+        });
+    });
+    app.post("/mail/:id/read", (req, res) => {
+        var query = { mail_id: req.params.id };
+        var newvalues = { $set: { read: true } };
+        Mail.updateOne(query, newvalues, (err) => {
+            if (err) return res.status(400).json({ error: 'Mail not found!' });
+            return res.status(200).json({ message: 'Mail added successfully!' })
+
+        });
+    });
+    app.get("/mail/:id/draft", (req, res) => {
+
+        var query = { mail_id: req.params.id }
+        Draft.find(query, function(err, mail) {
+            if (err) return res.status(400).json({ error: 'Mail not found!' })
+            return res.status(200).json(mail)
+        });
+    });
+    app.get("/mail/:id", (req, res) => {
+
+        var query = { mail_id: req.params.id }
+        Mail.find(query, function(err, mail) {
+            if (err) return res.status(400).json({ error: 'Mail not found!' })
+            return res.status(200).json(mail)
+        });
+    });
+
+    app.post("/mail/draft", async(req, res) => {
+        var myData = new Draft(req.body);
+        await next_draft.findOne(function(err, counter) {
+            if (err) return res.status(400).json({ error: 'counter not found!' })
+            counter.draft_value = counter.draft_value + 1;
+            myData.mail_id = counter.draft_value;
+            counter.save(function(err) {
+                if (err) return res.status(400).json({ error: 'Cannot update counter!' })
+            });
+        });
+
+        setTimeout(() => {
+            //myData.img.data = fs.readFileSync(req.body.img.path);
+            myData.save(function(err) {
+                if (err) return res.status(400).json({ error: 'Cannot add mail!' })
+                return res.status(200).json({ message: 'Draft added!' })
+            });
+        }, 1000);
+
+
+    });
+    app.put("/mail/draft", (req, res) => {
+        var query = { mail_id: req.body.mail_id }
+            //console.log(req.body);
+
+        Draft.findOne(query, function(err, draft) {
+            if (err) return res.status(400).json({ error: 'Cannot found' })
+
+            draft.username = req.body.username;
+            draft.from = req.body.from;
+            draft.to = req.body.to;
+            draft.sub = req.body.sub;
+            draft.msg = req.body.msg;
+            draft.time = req.body.time;
+            draft.read = req.body.read;
+            console.log(draft);
+            var id = draft._id;
+            draft.save(function(err) {
+                if (err) return res.status(400).json({ error: 'Cannot add mail!' })
+                return res.status(200).json({ message: 'Draft Updated!' })
+            });
+
+        })
+
+
+
+    });
+
+
+
+    app.post("/mail", (req, res) => {
+        var myData = new Mail(req.body);
+        next.findOne(function(err, counter) {
+            if (err) return res.status(400).json({ error: 'counter not found!' })
+            counter.sequence_value = counter.sequence_value + 1;
+            myData.mail_id = counter.sequence_value;
+            counter.save(function(err) {
+                if (err) return res.status(400).json({ error: 'Cannot update counter!' })
+                    //console.log(myData.mail_id);
+                    //return res.status(200).json( { message: 'Ok' } )
+            });
+        });
+
+        setTimeout(() => {
+            myData.save(function(err) {
+                if (err) return res.status(400).json({ error: 'Cannot add mail!' })
+                return res.status(200).json({ message: 'Mail added successfully!' })
+            });
+        }, 1000);
+
+
+    });
+    app.delete("/mail/:id/draft", (req, res) => {
+        var query = { mail_id: req.params.id }
+            // Draft.find( query, function(err, mail) {
+            // 	if (err) return res.status(400).json({error: "Mail does not exist!"});
+            // 	if (!mail) return res.status(400).json({ error: "Mail does not exist!" });
+        Draft.deleteOne(query, function(err) {
+            return err ? res.status(400).json({ error: "Mail does not exist!" }) :
+                res.status(200).json({ message: 'Ok' });
+        });
+        // });
+    });
+
+
 
     app.post('/api/login', async(req, res) => {
         const { email, password } = req.body
@@ -105,8 +239,13 @@ function mongoConnected() {
 
     })
 
-    app.get('/api/userdata', (req, res) => {
-        const user = User.findOne({ email: req.session.user })
+    app.post('/api/userdata', async(req, res) => {
+        const token = req.body
+        console.log(token)
+        const Obj = jwt.verify(token.token, TOKEN_SECRET)
+        console.log(Obj)
+        const user = await User.findOne({ email: Obj.email })
+        console.log(user)
         if (!user) {
             res.json({
                 status: false,
@@ -116,7 +255,7 @@ function mongoConnected() {
         }
         res.json({
             status: true,
-            email: req.session.user
+            email: Obj.email
         })
     })
 

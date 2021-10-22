@@ -1,10 +1,16 @@
-export class Mail{
-    id:number=1;
-    username:string="";
-    from:string="";
-    sub:string="";
-    msg:string="";
-    time:string="";
-    read:boolean=false;
-    type:string="main";
+export interface Mail{
+    mail_id:number;
+    username:string,
+    from:string;
+    sub:string;
+    msg:any;
+    time:string;
+    read:boolean;
+    to:String;
+    // path:String,
+    // img :{ 
+    //     path:String,
+    //     data: any, 
+    //     contentType: String 
+    //  }
 }

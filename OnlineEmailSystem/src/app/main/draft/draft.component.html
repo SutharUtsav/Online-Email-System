@@ -1,14 +1,13 @@
-<!-- <app-head></app-head> -->
 <div class="main__body">
     <div class="head">
-        <h2 style="padding: 4px;">Draft Mails</h2>
+        <h2 style="padding: 4px;" >Draft Mails</h2>
     </div>
     <div class="emailList">
         <!-- Email List rows starts -->
-        <div class="emailList__list" *ngFor="let mail of mail_list | searchfilter : searchTerm">
+        <div class="emailList__list" *ngFor="let mail of draft_list | searchfilter : searchTerm">
             <!-- Email Row Starts -->
-            <div *ngIf="mail.type == 'draft'">
-                <div (click)="navigate(mail.id)" class="emailRow" [class]="{'unread':mail.read == false}">
+            <!-- <div *ngIf="mail.type == 'draft'"> -->
+                <div (click)="navigate(mail.mail_id)" class="emailRow" >
                     <div class="emailRow__options">
                         <span class="material-icons"> work_outline </span>
                         <span class="material-icons"> check_circle </span>
@@ -19,14 +18,14 @@
 
                     <div class="emailRow__message">
                         <h4>
-                            {{mail.sub}}
-                            <span class="emailRow__description"> -{{mail.msg}} </span>
+                            Subject : {{mail.sub}}
+                            
                         </h4>
                     </div>
 
-                    <p class="emailRow__time">{{mail.time}}</p>
+                    <p class="emailRow__time">{{mail.time|date:'MMM d, y, h:mm a'}}</p>
                 </div>
-            </div>
+            <!-- </div> -->
             <!-- Email Row Ends -->
         </div>
     </div>
