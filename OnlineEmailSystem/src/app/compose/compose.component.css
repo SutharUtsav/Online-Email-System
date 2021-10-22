@@ -1,11 +1,29 @@
+body{
+    background-color: #404040;
+}
+.head{
+    margin: 2px;
+    padding: 2px;
+    background-color: black ;
+    color : white;
+    text-align: center;
+
+  } 
+  .disable{
+      display: none;
+  }
+  .head h2{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 .message-icon i{
     padding: 0px 3px;
     cursor: pointer;
 }
 .message-input .form-control{
-    border-radius: unset;
+    border-radius:1px;
     box-shadow: none;
 }
+
 .message-footer{
     background-color: whitesmoke;
     border-top:2px solid #E5E5E5;

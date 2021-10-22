@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MailServiceService } from '../main/mail-service.service';
+import { Mail } from '../main/mails/mails.entity';
+import { Location } from '@angular/common';
 import * as $ from 'jquery';
 
 @Component({
@@ -9,89 +13,107 @@ import * as $ from 'jquery';
 export class ComposeComponent implements OnInit {
   tog_fname: boolean = true;
   mini: boolean = true;
-  selectfile(){
+  public title: string = "New"
+
+  public id: number = 0;
+  public new:boolean=true;
+  public person: Mail = new Mail();
+
+  constructor(private location: Location, private ar: ActivatedRoute, private mail: MailServiceService) { }
+
+  selectfile() {
     const elem = document.getElementById("file-input");
-    if(elem)
+    if (elem)
       elem.click();
   }
-  minimize(){
+  minimize() {
     const elem = document.getElementById("message-input");
     const elem1 = document.getElementById("message-footer");
     const elem2 = document.getElementById("compose");
-    if(elem&&elem1&&elem2){
+    if (elem && elem1 && elem2) {
       elem.style.display = "none";
       elem1.style.display = "none";
       elem2.className = "col-md-3 p-3";
-      elem2.style.bottom="10px";
-      elem2.style.position="fixed";
+      elem2.style.bottom = "10px";
+      elem2.style.position = "fixed";
       var text1 = document.getElementById("text1");
-      if(text1)
+      if (text1)
         text1.style.fontSize = "16px";
     }
 
     this.mini = true;
-    this.tog_fname=true;
+    this.tog_fname = true;
   }
-  selectpic(){
+  selectpic() {
     const elem = document.getElementById("pic-input");
-    if(elem)
+    if (elem)
       elem.click();
   }
-  closemail(){
+  closemail() {
     const elem = document.getElementById("compose");
-    if(elem)
+    if (elem)
       elem.style.display = "none";
+    this.location.back()
+
   }
-  maxscreen(){
+  maxscreen() {
     const elem = document.getElementById("compose");
     const elem3 = document.getElementById("mail_text");
-    if(elem&&elem3){
+    if (elem && elem3) {
       elem.className = "col-md-12 p-3";
-      elem3.style.height="300px";
+      elem3.style.height = "300px";
     }
     this.tog_fname = !this.tog_fname;
-    if(this.mini && elem){
+    if (this.mini && elem) {
       const elem2 = document.getElementById("message-input");
       const elem1 = document.getElementById("message-footer");
       var text1 = document.getElementById("text1");
-      elem.style.bottom="0px";
-      elem.style.position="sticky";
-      if(text1)
+      elem.style.bottom = "0px";
+      elem.style.position = "sticky";
+      if (text1)
         text1.style.fontSize = "25px";
-      if(elem2&&elem1){
+      if (elem2 && elem1) {
         elem2.style.display = "block";
         elem1.style.display = "block";
       }
       this.mini = false;
     }
   }
-  minscreen(){
+  minscreen() {
     const elem = document.getElementById("compose");
     const elem3 = document.getElementById("mail_text");
-    if(elem&&elem3){
+    if (elem && elem3) {
       elem.className = "col-md-4 p-3";
-      elem3.style.height="156px"
+      elem3.style.height = "156px"
       var text1 = document.getElementById("text1");
-      if(text1)
-        text1.style.fontSize = "20px";
+      if (text1)
+        text1.style.fontSize = "18px";
     }
     this.tog_fname = !this.tog_fname;
   }
 
-  
-  
-  constructor() { }
-  
+
   ngOnInit(): void {
-    
-    $(document).ready(function() {
-      $('#jBold').click(function() {
+    if (this.ar.snapshot.paramMap.get("id") != null) {
+      this.title="Edit";
+      this.new = false;
+      this.id = Number(this.ar.snapshot.paramMap.get("id"));
+
+      this.person = this.mail.getmail(this.id)
+    }else{
+      this.new = true;
+    }
+
+
+
+    $(document).ready(function () {
+      $('#jBold').click(function () {
         document.execCommand('bold');
       });
-      $('#jItalic').click(function() {
+      $('#jItalic').click(function () {
         document.execCommand('italic');
       });
-      $('#junder').click(function() {
+      $('#junder').click(function () {
         document.execCommand('underline');
       });
     });

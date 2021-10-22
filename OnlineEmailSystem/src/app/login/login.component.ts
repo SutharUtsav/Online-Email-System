@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 import * as $ from 'jquery';
 
 @Component({
@@ -22,9 +24,24 @@ export class LoginComponent implements OnInit {
       this.submit=false;
     }
   }
-  constructor() { }
+  constructor(private auth:AuthService,private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  registerUser(){
+    this.auth.registerUser(this.user).subscribe(data=>
+      {
+        if(data.success){
+          this.router.navigate(['emailgenerator'])
+          this.auth.setLoggedIn(true)
+        }
+        else{
+          window.alert(data.message)
+        }
+      }
+
+    );
   }
 }
 
