@@ -24,46 +24,30 @@
                 <div class="col-md-12 p-0 message-input" id="message-input">
 
                     <div *ngIf="new; else elsePart" class="form-group">
-                        <input type="email" class="form-control" title="To" id="to_email" name="to_email" required [(ngModel)]="new_mail.to" aria-describedby="emailHelp" placeholder="To">
-                        <input type="text" class="form-control" title="Subject" id="mail_subject" name="mail_subject" [(ngModel)]="new_mail.sub" aria-describedby="emailHelp" placeholder="Subject">
-
-                        <!-- <div  class="card" role="text" style="border-radius: 0% !important;color: rgb(216, 57, 57);">From:{{new_mail.from}}</div> -->
-
-                        <angular-editor class="form-control" id="mail_text" aria-readonly="true" aria-label="Message Body" [(ngModel)]="new_mail.msg" [config]="config"></angular-editor>
-                        <!-- <div class="form-control" id="mail_text" aria-readonly="true" role="textbox" aria-label="Message Body" contenteditable>
-                                     {{new_mail.msg}} 
-                                                              
-                                    
-                                </div> -->
-                        <!-- <div [ngClass]="{disable:img}" class="card card-primary" style="border-radius: 0% !important;">
-                                    IMAGE
-                        </div> -->
+                        <input type="email" class="form-control" title="To" id="to_email" name="to_email" required 
+                            [(ngModel)]="new_mail.to" aria-describedby="emailHelp" placeholder="To">
+                        <input type="text" class="form-control" title="Subject" id="mail_subject" name="mail_subject" 
+                            [(ngModel)]="new_mail.sub" aria-describedby="emailHelp" placeholder="Subject">
+                        <angular-editor class="form-control" id="mail_text" aria-readonly="true" aria-label="Message Body" 
+                            [(ngModel)]="new_mail.msg" [config]="config"></angular-editor>
                     </div>
                     <ng-template #elsePart>
                         <div class="form-group">
-                            <input type="email" class="form-control" title="To" id="to_email" name="to_email" value="{new_mail.to}" required [(ngModel)]="new_mail.to" aria-describedby="emailHelp" placeholder="To">
-                            <input type="text" class="form-control" title="Subject" id="mail_subject" value="{new_mail.sub}" name="mail_subject" [(ngModel)]="new_mail.sub" aria-describedby="emailHelp" placeholder="Subject">
-
+                            <input type="email" class="form-control" title="To" id="to_email" name="to_email" value="{new_mail.to}" required 
+                                [(ngModel)]="new_mail.to" aria-describedby="emailHelp" placeholder="To">
+                            <input type="text" class="form-control" title="Subject" id="mail_subject" value="{new_mail.sub}" name="mail_subject" 
+                                [(ngModel)]="new_mail.sub" aria-describedby="emailHelp" placeholder="Subject">
                             <div *ngIf="forward" class="card" role="text" style="border-radius: 0% !important;color: rgb(216, 57, 57);">From:{{new_mail.from}}</div>
-
                             <angular-editor class="form-control" id="mail_text" aria-readonly="true" aria-label="Message Body" name="mail_text" [(ngModel)]="new_mail.msg" [config]="config">
                                 {{new_mail.msg}}
                             </angular-editor>
-
-                            <!-- <div class="form-control" id="mail_text" aria-readonly="true"  aria-label="Message Body" contenteditable>
-                                    {{new_mail.msg}}
-                                                              
-                                    
-                                </div> -->
-                            <!-- <div [ngClass]="{disable:img}" class="card card-primary" style="border-radius: 0% !important;">
-                                                IMAGE
-                                    </div> -->
                         </div>
                     </ng-template>
 
                 </div>
                 <div class="col-md-12 message-footer p-2" id="message-footer">
-                    <button (click)="Send()" title="Send Mail" class="btn btn-primary btn-sm pl-3 pr-3">SEND&nbsp;<i class="fa fa-send" aria-hidden="true" style="color: white;"></i></button>
+                    <button (click)="Send()" title="Send Mail" class="btn btn-primary btn-sm pl-3 pr-3">SEND&nbsp;
+                        <i class="fa fa-send" aria-hidden="true" style="color: white;"></i></button>
 
                     <span class="pull-right">
                             <i class="fa fa-trash-o" title="Discard" (click)="discard()" aria-hidden="true"></i>

@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   emailValidate(email : string){
-    console.log(email)
+    //console.log(email)
     return this.http.put<myData>('http://localhost:8000/api/emailValidate',{email})
   }
 

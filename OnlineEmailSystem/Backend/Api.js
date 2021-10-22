@@ -106,9 +106,9 @@ function mongoConnected() {
         });
     });
 
-    app.post("/mail/draft", async(req, res) => {
+    app.post("/mail/draft", (req, res) => {
         var myData = new Draft(req.body);
-        await next_draft.findOne(function(err, counter) {
+        next_draft.findOne(function(err, counter) {
             if (err) return res.status(400).json({ error: 'counter not found!' })
             counter.draft_value = counter.draft_value + 1;
             myData.mail_id = counter.draft_value;
@@ -118,7 +118,6 @@ function mongoConnected() {
         });
 
         setTimeout(() => {
-            //myData.img.data = fs.readFileSync(req.body.img.path);
             myData.save(function(err) {
                 if (err) return res.status(400).json({ error: 'Cannot add mail!' })
                 return res.status(200).json({ message: 'Draft added!' })
@@ -218,14 +217,14 @@ function mongoConnected() {
             // console.log(req.session.user)
         }
     })
-    app.get('/api/isloggedin', (req, res) => {
-        console.log("enter")
-        console.log(req.session.user)
-        return res.json({
-            status: !!req.session.user
-        })
+    // app.get('/api/isloggedin', (req, res) => {
+    //     //console.log("enter")
+    //     //console.log(req.session.user)
+    //     return res.json({
+    //         status: !!req.session.user
+    //     })
 
-    })
+    // })
     app.post('/api/register', async(req, res) => {
         const u = req.body
         const user = new User(u)
@@ -241,9 +240,9 @@ function mongoConnected() {
 
     app.post('/api/userdata', async(req, res) => {
         const token = req.body
-        console.log(token)
+        //console.log(token)
         const Obj = jwt.verify(token.token, TOKEN_SECRET)
-        console.log(Obj)
+        //console.log(Obj)
         const user = await User.findOne({ email: Obj.email })
         console.log(user)
         if (!user) {
@@ -255,7 +254,8 @@ function mongoConnected() {
         }
         res.json({
             status: true,
-            email: Obj.email
+            email: Obj.email,
+            username : user.fname
         })
     })
 
@@ -270,7 +270,7 @@ function mongoConnected() {
     app.put('/api/emailValidate', async(req, res) => {
             emailp = req.body.email
 
-            console.log(emailp)
+            //console.log(emailp)
             const user = await User.findOne({ email: emailp })
 
             console.log(user)
@@ -281,7 +281,7 @@ function mongoConnected() {
                 })
                 return
             } else {
-                console.log(req.session.user)
+                //console.log(req.session.user)
                 oldvalue = { email: "nothing@gmail.com" }
                 const resp = await User.updateOne(oldvalue, {
                         $set: {

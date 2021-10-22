@@ -35,7 +35,7 @@ export class ComposeComponent implements OnInit {
   };
   public id:number;
   public user_mail:string="";
-  public user_username:string="You";
+  public user_username:string="";
   //public person: any;
   public new_mail: Mail = { mail_id: 0, from: "", msg:null, read: false, sub: "", time: "", username: "", to: "" };
 
@@ -72,10 +72,11 @@ export class ComposeComponent implements OnInit {
       this.new_mail.time = (String)(new Date());
       this.new_mail.read = false;
       //this.new_mail.msg = this.htmlContent;
-      this.new_mail.username = this.user_username;
-      this.new_mail.from = this.user_mail;
       this.user.getData().subscribe(data=>{
-        this.user_mail=data.email
+        this.user_mail=data.email;
+        this.new_mail.from = this.user_mail;
+        this.user_username = data.username;
+        this.new_mail.username=this.user_username;
         this.mail.postDraft(this.new_mail).subscribe({
           next: data => {
           console.log("Mail Added!!" )
@@ -96,9 +97,11 @@ export class ComposeComponent implements OnInit {
       this.new_mail.read = false;
       //alert(this.new_mail.msg);
       this.new_mail.username = this.user_username;
-      this.new_mail.from = this.user_mail;
       this.user.getData().subscribe(data=>{
         this.user_mail=data.email
+        this.new_mail.from = this.user_mail;
+        this.user_username = data.username;
+        this.new_mail.username=this.user_username;
         this.mail.putDraft(this.new_mail).subscribe({
           next: data => {
           console.log("Draft Updated Sucessfully!");
@@ -118,6 +121,8 @@ export class ComposeComponent implements OnInit {
           //console.log(this.person.mail_id);
           this.user.getData().subscribe(data=>{
             this.user_mail=data.email
+            this.user_username = data.username;
+            this.new_mail.username=this.user_username;
             this.mail.deleteDraft(this.new_mail.mail_id).subscribe({
               next: data => {
                 console.log("Mail Removed");
@@ -172,7 +177,6 @@ export class ComposeComponent implements OnInit {
   }
 
   Send() {
-
     if (this.new_mail.to == "") {
       alert("mail To field can not be empty");
       $("#to_email")?.focus();
@@ -187,7 +191,6 @@ export class ComposeComponent implements OnInit {
       alert("Invalid To Mail");
       $("#to_email")?.focus();
       $("#to_email")?.css('border', '1px solid red');
-
       setTimeout(() => {
         $("#to_email")?.css('border', 'none');
       }, 2000);
@@ -201,20 +204,18 @@ export class ComposeComponent implements OnInit {
         $("#mail_subject")?.css('border', 'none');
       }, 2000);
     } else {
-      var text = $('[role=textbox]').text();
-      
       this.new_mail.time = (String)(new Date());
       this.new_mail.read = false;
-      this.new_mail.username = this.user_username;
-      this.new_mail.from = this.user_mail;    
       this.user.getData().subscribe(data=>{
         this.user_mail=data.email
+        this.new_mail.from = this.user_mail;
+        this.user_username = data.username;
+        this.new_mail.username = this.user_username;   
         this.mail.postMail(this.new_mail).subscribe({
           next: data => {
             console.log("Mail Added!!" + data)
             alert("Mail Send Sucessfully!");
             this.router.navigate(['/main/sent']);
-  
           },
           error: error => console.log("Cannot add a new Draft" + error)
         })
@@ -240,6 +241,8 @@ export class ComposeComponent implements OnInit {
         this.forward=false;
         this.user.getData().subscribe(data=>{
           this.user_mail=data.email
+          this.user_username = data.username;
+        //this.new_mail.username=this.user_username;
           this.mail.getDraft(this.id).subscribe((data: any) => {
             this.new_mail = data[0];
           //this.htmlContent = this.new_mail.msg;
@@ -253,6 +256,8 @@ export class ComposeComponent implements OnInit {
         this.new=false;
         this.forward=true;
         this.user.getData().subscribe(data=>{
+          this.user_username = data.username;
+        //this.new_mail.username=this.user_username;
           this.user_mail=data.email
           this.mail.getmail(this.id).subscribe((data: any) => {
             this.new_mail = data[0];

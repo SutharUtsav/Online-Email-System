@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 interface myData {
   email: string,
+  username:string,
   status: boolean,
 }
 

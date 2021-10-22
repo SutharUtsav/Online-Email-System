@@ -15,7 +15,7 @@ export class EmailgeneratorComponent implements OnInit {
   }
 
   emailValidate(){
-    console.log(this.email)
+    //console.log(this.email)
     this.auth.emailValidate(this.email).subscribe(data=>
       {
         if(data.success){
