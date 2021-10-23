@@ -215,13 +215,14 @@ export class ComposeComponent implements OnInit {
               this.new_mail.from = this.user_mail;
               this.user_username = data.username;
               this.new_mail.username = this.user_username;
+              this.new_mail.mail_id = 0
               this.mail.postMail(this.new_mail).subscribe({
                 next: data => {
                   console.log("Mail Added!!" + data)
                   alert("Mail Send Sucessfully!");
                   this.router.navigate(['/main/sent']);
                 },
-                error: error => console.log("Cannot add a new Draft" + error)
+                error: error => console.log("Cannot add a new Mail" + error)
               })
             })
            }

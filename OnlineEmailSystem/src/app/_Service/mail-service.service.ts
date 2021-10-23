@@ -30,6 +30,7 @@ export class MailServiceService {
   
   
   public postDraft(mail:Mail):Observable<any>{
+    //console.log(mail);
     return this.httpClient.post<any>(this.url+"/draft",mail,httpOptions);
   }
   public putDraft(mail:Mail):Observable<any>{
@@ -41,6 +42,7 @@ export class MailServiceService {
 
   }
   public postMail(mail:Mail):Observable<any>{
+    console.log(mail)
       return this.httpClient.post<any>(this.url,mail,httpOptions);
   }
   public getMails():Observable<Mail[]>{

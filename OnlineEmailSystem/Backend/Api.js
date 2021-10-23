@@ -156,10 +156,13 @@ function mongoConnected() {
 
 
     app.post("/mail", (req, res) => {
+        //console.log(req.body)
+        delete req.body._id;
         var myData = new Mail(req.body);
         next.findOne(function(err, counter) {
             if (err) return res.status(400).json({ error: 'counter not found!' })
             counter.sequence_value = counter.sequence_value + 1;
+            //console.log(counter.sequence_value);
             myData.mail_id = counter.sequence_value;
             counter.save(function(err) {
                 if (err) return res.status(400).json({ error: 'Cannot update counter!' })
@@ -168,8 +171,12 @@ function mongoConnected() {
         });
 
         setTimeout(() => {
+            
             myData.save(function(err) {
-                if (err) return res.status(400).json({ error: 'Cannot add mail!' })
+                if (err){
+                    console.dir(err)
+                    return res.status(400).json({ error: 'Cannot add mail!' })
+                }
                 return res.status(200).json({ message: 'Mail added successfully!' })
             });
         }, 1000);
