@@ -19,8 +19,9 @@ export class EmailgeneratorComponent implements OnInit {
     this.auth.emailValidate(this.email).subscribe(data=>
       {
         if(data.success){
-          localStorage.setItem("token",data.token)
-          this.router.navigate(['main/inbox'])
+          //localStorage.setItem("token",data.token)
+          alert("You are Successfully Register\nNow Login to Continue.")
+          this.router.navigate([''])
           this.auth.setLoggedIn(true)
         }
         else{

@@ -163,8 +163,7 @@ function mongoConnected() {
             myData.mail_id = counter.sequence_value;
             counter.save(function(err) {
                 if (err) return res.status(400).json({ error: 'Cannot update counter!' })
-                    //console.log(myData.mail_id);
-                    //return res.status(200).json( { message: 'Ok' } )
+                   
             });
         });
 
@@ -179,14 +178,12 @@ function mongoConnected() {
     });
     app.delete("/mail/:id/draft", (req, res) => {
         var query = { mail_id: req.params.id }
-            // Draft.find( query, function(err, mail) {
-            // 	if (err) return res.status(400).json({error: "Mail does not exist!"});
-            // 	if (!mail) return res.status(400).json({ error: "Mail does not exist!" });
+            
         Draft.deleteOne(query, function(err) {
             return err ? res.status(400).json({ error: "Mail does not exist!" }) :
                 res.status(200).json({ message: 'Ok' });
         });
-        // });
+      
     });
 
 
@@ -210,21 +207,10 @@ function mongoConnected() {
                     success: true,
                     token: token
                 })
-                // req.session.user = email
-                // req.session.save()
-
-
-            // console.log(req.session.user)
+                
         }
     })
-    // app.get('/api/isloggedin', (req, res) => {
-    //     //console.log("enter")
-    //     //console.log(req.session.user)
-    //     return res.json({
-    //         status: !!req.session.user
-    //     })
-
-    // })
+   
     app.post('/api/register', async(req, res) => {
         const u = req.body
         const user = new User(u)
@@ -266,14 +252,31 @@ function mongoConnected() {
             success: true
         })
     })
+    app.post('/api/mailValidate',async(req,res)=>{
+        let email = req.body.email
+        console.log(email)
+        const user = await User.findOne({email:email})
+
+        console.log(user)
+        if(user){
+            res.json({
+                status:true
+
+            })
+        }else{
+            res.json({
+                status:false,
+                message:"Mail does not exist!"
+            })
+        }
+    })
 
     app.put('/api/emailValidate', async(req, res) => {
             emailp = req.body.email
 
-            //console.log(emailp)
             const user = await User.findOne({ email: emailp })
 
-            console.log(user)
+            //console.log(user)
             if (user) {
                 res.json({
                     success: false,
@@ -281,7 +284,6 @@ function mongoConnected() {
                 })
                 return
             } else {
-                //console.log(req.session.user)
                 oldvalue = { email: "nothing@gmail.com" }
                 const resp = await User.updateOne(oldvalue, {
                         $set: {
@@ -294,55 +296,20 @@ function mongoConnected() {
                             return
                         }
                         console.log("1 document updated");
-                        const token = jwt.sign({
-                            id: resp._id,
-                            email: resp.email,
-                        }, TOKEN_SECRET)
+                        
                         res.json({
                             success: true,
-                            token: token
                         })
 
                     })
-                console.log(resp)
+                //console.log(resp)
             }
 
 
 
 
         })
-        // app.delete("/mail/:id", (req, res) => {
-        // 	Mail.findById( req.params.id, function(err, mail) {
-        // 		if (err) return res.status(400).json({error: "Maildoes not exist!"});
-        // 		if (!mail) return res.status(400).json({ error: "Mail does not exist!" });
-        // 		mail.remove( function(err) {
-        // 			return err  ? res.status(400).json({ error: "Mail does not exist!" }) 
-        // 						: res.status(200).json({ message: 'Ok' });
-        // 		});
-        // 	});
-        // });
-
-    // 	app.post("/mail", (req, res) => {
-    // 		var myData = new Mail(req.body);
-    // 		myData.save( function(err) {
-    // 			if (err) return res.status(400).json({ error: 'Cannot add mail!'})
-    // 			return res.status(200).json( {message : 'Mail added successfully!'})
-    // 		});
-    // 	});	
-
-    // 	app.put("/mail", (req, res) => {
-    // 		Mail.findById( req.body._id, function(err, mail) {
-    // 			if (err) return res.status(400).json({ error: 'Mail not found!' })
-
-    // 			mail.name = req.body.name;
-    // 			mail.designation = req.body.designation;
-
-    // 			mail.save(function (err) {
-    // 				if (err) return res.status(400).json({ error: 'Cannot update employee!' })
-    // 				return res.status(200).json( { message: 'Ok' } )
-    // 			});
-    // 		});			
-    // 	});	
+       
 }
 app.listen(port, function(err) {
     if (err)

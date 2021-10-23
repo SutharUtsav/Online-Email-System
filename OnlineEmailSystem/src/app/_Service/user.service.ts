@@ -11,7 +11,10 @@ interface myData {
 interface isLoggedIn {
   status: boolean
 }
-
+interface validate{
+  status:boolean,
+  message:string
+}
 interface logoutStatus {
   success: boolean
 }
@@ -33,6 +36,10 @@ export class UserService {
 
   logout() {
     return this.http.get<logoutStatus>('http://localhost:8000/api/logout')
+  }
+  mailValidate(email : string){
+    console.log(email)
+    return this.http.post<validate>('http://localhost:8000/api/mailValidate',{email})
   }
 
 }
