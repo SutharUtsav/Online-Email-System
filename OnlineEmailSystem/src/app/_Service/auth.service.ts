@@ -36,7 +36,7 @@ export class AuthService {
       return false
     }
   }
-
+  //Login
   getUserDetails(email:string, password:string) {
     // post these details to API server return user info if correct
     return this.http.post<myData>('http://localhost:8000/api/login', {

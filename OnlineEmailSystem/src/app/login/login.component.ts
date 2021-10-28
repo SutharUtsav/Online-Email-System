@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
       {
         if(data.success){
           this.router.navigate(['emailgenerator'])
-          this.auth.setLoggedIn(true)
+          //this.auth.setLoggedIn(true)
         }
         else{
           window.alert(data.message)

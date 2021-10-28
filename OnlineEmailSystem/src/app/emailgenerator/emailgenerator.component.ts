@@ -22,7 +22,7 @@ export class EmailgeneratorComponent implements OnInit {
           //localStorage.setItem("token",data.token)
           alert("You are Successfully Register\nNow Login to Continue.")
           this.router.navigate([''])
-          this.auth.setLoggedIn(true)
+          //this.auth.setLoggedIn(true)
         }
         else{
           window.alert(data.message)

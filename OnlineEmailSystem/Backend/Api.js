@@ -2,11 +2,10 @@ var express = require("express");
 var app = express();
 const jwt = require("jsonwebtoken")
 var session = require("express-session");
-const port = process.env.PORT || 8000;
+const port = 8000;
 
 const TOKEN_SECRET = "sudh8dishksnadisdshdbasdsknosadjodkdnbdudj"
-
-
+//limits for image uploading
 app.use(express.urlencoded({ extended: true }, { limit: '50mb' }))
 app.use(express.json({ limit: '50mb' }))
 
@@ -18,7 +17,7 @@ var mongoose = require("mongoose");
 const { findOne } = require("./models/Users");
 mongoose.Promise = global.Promise;
 //for localhost
-//mongoose.connect("mongodb://localhost:27017/OnlineEmailSystem", { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect("mongodb://localhost:27017/OnlineEmailSystem", { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connect("mongodb+srv://root:root@cluster0.xitb8.mongodb.net/OnlineEmailSystem", { useNewUrlParser: true, useUnifiedTopology: true });
 
 var db = mongoose.connection;
@@ -26,6 +25,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', mongoConnected);
 
 function mongoConnected() {
+
     var EmailSchema = new mongoose.Schema({
         mail_id: Number,
         username: String,
@@ -68,6 +68,7 @@ function mongoConnected() {
     var next = mongoose.model("Counter", Counter);
     var next_draft = mongoose.model("next_draft", Draft_count);
 
+    //get mail list
     app.get("/mail", (req, res) => {
         Mail.find(function(err, mails) {
             if (err) return res.status(400).json({ error: 'Mail not found!' })
@@ -75,6 +76,7 @@ function mongoConnected() {
             return res.status(200).json(mails);
         });
     });
+    //get draft list
     app.get("/mail/draft", (req, res) => {
         Draft.find(function(err, mails) {
             if (err) return res.status(400).json({ error: 'Mail not found!' })
@@ -82,6 +84,7 @@ function mongoConnected() {
             return res.status(200).json(mails);
         });
     });
+    //read mail
     app.post("/mail/:id/read", (req, res) => {
         var query = { mail_id: req.params.id };
         var newvalues = { $set: { read: true } };
@@ -91,6 +94,7 @@ function mongoConnected() {
 
         });
     });
+    //get draft by id
     app.get("/mail/:id/draft", (req, res) => {
 
         var query = { mail_id: req.params.id }
@@ -99,6 +103,7 @@ function mongoConnected() {
             return res.status(200).json(mail)
         });
     });
+    //get mail by id
     app.get("/mail/:id", (req, res) => {
 
         var query = { mail_id: req.params.id }
@@ -107,7 +112,7 @@ function mongoConnected() {
             return res.status(200).json(mail)
         });
     });
-
+    //post draft 
     app.post("/mail/draft", (req, res) => {
         var myData = new Draft(req.body);
         next_draft.findOne(function(err, counter) {
@@ -125,9 +130,9 @@ function mongoConnected() {
                 return res.status(200).json({ message: 'Draft added!' })
             });
         }, 1000);
-
-
     });
+    
+    //update draft
     app.put("/mail/draft", (req, res) => {
         var query = { mail_id: req.body.mail_id }
             //console.log(req.body);
@@ -156,7 +161,7 @@ function mongoConnected() {
     });
 
 
-
+    //post mail
     app.post("/mail", (req, res) => {
         //console.log(req.body)
         delete req.body._id;
@@ -185,6 +190,7 @@ function mongoConnected() {
 
 
     });
+    //delete draft 
     app.delete("/mail/:id/draft", (req, res) => {
         var query = { mail_id: req.params.id }
             
@@ -195,8 +201,8 @@ function mongoConnected() {
       
     });
 
-
-
+    //login Api
+    //login
     app.post('/api/login', async(req, res) => {
         const { email, password } = req.body
 
@@ -219,20 +225,20 @@ function mongoConnected() {
                 
         }
     })
-   
+   //register
     app.post('/api/register', async(req, res) => {
         const u = req.body
         const user = new User(u)
         console.log(u)
         const resp = await user.save()
-        console.log(resp)
+        //console.log(resp)
         res.json({
             success: true,
-            message: "wel come"
+            message: "welcome"
         })
 
     })
-
+    //get users data
     app.post('/api/userdata', async(req, res) => {
         const token = req.body
         //console.log(token)
@@ -253,7 +259,7 @@ function mongoConnected() {
             username : user.fname
         })
     })
-
+    //logout
     app.get('/api/logout', (req, res) => {
         console.log("entered in logout")
         req.session.destroy()
@@ -261,6 +267,8 @@ function mongoConnected() {
             success: true
         })
     })
+
+    //validate mail while Sending mail
     app.post('/api/mailValidate',async(req,res)=>{
         let email = req.body.email
         console.log(email)
@@ -279,13 +287,10 @@ function mongoConnected() {
             })
         }
     })
-
+    //validate mail while generating 
     app.put('/api/emailValidate', async(req, res) => {
             emailp = req.body.email
-
             const user = await User.findOne({ email: emailp })
-
-            //console.log(user)
             if (user) {
                 res.json({
                     success: false,
@@ -311,18 +316,13 @@ function mongoConnected() {
                         })
 
                     })
-                //console.log(resp)
             }
-
-
-
-
-        })
-       
+        })       
 }
+
 app.listen(port, function(err) {
     if (err)
         console.log("Error in server setup")
     else
-        console.log("Server listening on Port", port);
+        console.log("Server listening on Port "+port+" \n==> Link http://localhost:8000/ <==");
 });

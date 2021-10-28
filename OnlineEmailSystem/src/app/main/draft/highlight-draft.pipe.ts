@@ -12,7 +12,7 @@ export class HighlightDraftPipe implements PipeTransform {
     const match = text.match(regex);
 
     if(match){
-      let newstring = text.replace(regex,`<b><u>${match[0]}</u></b>`);
+      let newstring = text.replace(regex,`<span class="emailRow__title text-dark bg-warning"><i><b><u>${match[0]}</u></b></i></span>`);
       return newstring;
     }
 
